@@ -66,10 +66,12 @@ const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
 /////////////////////////////////////////////////
 
 //Updates movements in the interface
-const displayMovements = function (movements) {
+const displayMovements = function (movements, sort = false) {
   containerMovements.innerHTML = '';
 
-  movements.forEach(function (mov, i) {
+  const sortedMovs = sort ? movements.slice().sort((a, b) => a - b) : movements;
+
+  sortedMovs.forEach(function (mov, i) {
     const type = mov > 0 ? 'deposit' : 'withdrawal';
 
     const html = `<div class="movements__row">
@@ -167,7 +169,6 @@ btnTransfer.addEventListener('click', function (e) {
     accs => accs.username === inputTransferTo.value
   );
   const amount = Number(inputTransferAmount.value);
-  console.log(receiverAccount, amount);
 
   inputTransferTo.value = inputTransferAmount.value = '';
   inputTransferAmount.blur();
@@ -181,6 +182,20 @@ btnTransfer.addEventListener('click', function (e) {
     receiverAccount.movements.push(amount);
     updateUI(currentAccount);
   }
+});
+
+//Loan function
+//Only accept when any deposit > 10% of the request
+btnLoan.addEventListener('click', function (e) {
+  e.preventDefault();
+  const amount = Number(inputLoanAmount.value);
+
+  if (amount > 0 && currentAccount.movements.some(mov => mov >= amount * 0.1)) {
+    currentAccount.movements.push(amount);
+    updateUI(currentAccount);
+  }
+  inputLoanAmount.value = '';
+  inputLoanAmount.blur();
 });
 
 //Delete account Function
@@ -197,4 +212,12 @@ btnClose.addEventListener('click', function (e) {
     containerApp.style.opacity = 0;
     inputCloseUsername.value = inputClosePin.value = '';
   }
+});
+
+//Sort Movements Function
+let sorted = false;
+btnSort.addEventListener('click', function (e) {
+  e.preventDefault();
+  displayMovements(currentAccount.movements, !sorted);
+  sorted = !sorted;
 });
