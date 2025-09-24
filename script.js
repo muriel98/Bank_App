@@ -84,9 +84,9 @@ const displayMovements = function (movements) {
 };
 
 //Calculates and displays the balance
-const calcDisplayBalance = function (movements) {
-  const balance = movements.reduce((acc, mov) => acc + mov, 0);
-  labelBalance.textContent = `${balance} € `;
+const calcDisplayBalance = function (acc) {
+  acc.balance = acc.movements.reduce((acc, mov) => acc + mov, 0);
+  labelBalance.textContent = `${acc.balance} € `;
 };
 
 //Calculates and displays the summary
@@ -126,6 +126,15 @@ console.log(accounts);
 
 let currentAccount;
 
+const updateUI = function (acc) {
+  //Display movements
+  displayMovements(acc.movements);
+  //Display Balance
+  calcDisplayBalance(acc);
+  //Display Sumary
+  calcDisplaySummary(acc);
+};
+
 btnLogin.addEventListener('click', function (event) {
   //Prevent form from submitting
   event.preventDefault();
@@ -147,12 +156,45 @@ btnLogin.addEventListener('click', function (event) {
 
     //make pin lose the focus
     inputLoginPin.blur();
+    updateUI(currentAccount);
+  }
+});
 
-    //Display movements
-    displayMovements(currentAccount.movements);
-    //Display Balance
-    calcDisplayBalance(currentAccount.movements);
-    //Display Sumary
-    calcDisplaySummary(currentAccount);
+//Transfer money Function
+btnTransfer.addEventListener('click', function (e) {
+  e.preventDefault();
+  const receiverAccount = accounts.find(
+    accs => accs.username === inputTransferTo.value
+  );
+  const amount = Number(inputTransferAmount.value);
+  console.log(receiverAccount, amount);
+
+  inputTransferTo.value = inputTransferAmount.value = '';
+  inputTransferAmount.blur();
+  if (
+    receiverAccount &&
+    currentAccount.balance > 0 &&
+    currentAccount.balance >= amount &&
+    receiverAccount !== currentAccount
+  ) {
+    currentAccount.movements.push(-amount);
+    receiverAccount.movements.push(amount);
+    updateUI(currentAccount);
+  }
+});
+
+//Delete account Function
+btnClose.addEventListener('click', function (e) {
+  e.preventDefault();
+  if (
+    inputCloseUsername.value === currentAccount.username &&
+    Number(inputClosePin.value) === currentAccount.pin
+  ) {
+    const index = accounts.findIndex(
+      acc => acc.username === currentAccount.username
+    );
+    accounts.splice(index, 1);
+    containerApp.style.opacity = 0;
+    inputCloseUsername.value = inputClosePin.value = '';
   }
 });
