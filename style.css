@@ -19,44 +19,47 @@ body {
   font-family: 'Poppins', sans-serif;
   color: #8a8a8a;
   background-color: #ffffff;
-  height: 100vh;
   padding: 2rem;
+  display: flex;
+  margin-top: 5%;
+  align-items: center;
+  height: 60vh;
 }
 
 nav {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 2rem;
-  position: relative;
+  position: absolute;
+  z-index: 2;
+  top: 40%;
+  left: 45%;
+
+  height: 10.25rem;
+}
+
+nav img {
+  top: -200%;
 }
 
 .welcome {
+  position: fixed;
+  top: 5%;
+  left: 5;
   font-size: 1.9rem;
   font-weight: 500;
 }
 
 .logo {
+  position: absolute;
+
+  left: 25%;
   height: 10.25rem;
-  align-items: center;
-  justify-content: center;
-  position: absolute;
-  margin-top: 35%;
-  left: 45%;
-  right: 50%;
 }
-
-.login {
-  display: flex;
-
-  align-items: center;
-  justify-content: center;
-  position: absolute;
-  margin-top: 50%;
-  left: 45%;
-  right: 50%;
-  z-index: 10;
-  transition: opacity 0.6s ease;
+.logout__btn img {
+  width: 2.5rem;
+  color: gray;
+  position: fixed;
+  right: 5%;
+  top: 5%;
+  transition: all 1s ease;
 }
 
 .login__input {
@@ -65,15 +68,21 @@ nav {
   font-size: 2rem;
   font-family: inherit;
   text-align: center;
+
   width: 12rem;
   border-radius: 10rem;
-  margin-right: 1rem;
+
   color: inherit;
   border: 1px solid #c3c2c2;
   transition: all 0.3s;
 }
 .fade_out {
   opacity: 0;
+  transition: all 0.3s ease;
+}
+.fade_in {
+  opacity: 1;
+  transition: all 3s ease;
 }
 
 .login__input:focus {
@@ -108,6 +117,7 @@ nav {
   position: relative;
   max-width: 100rem;
   margin: 4rem auto;
+  margin-top: 10rem;
   display: grid;
   grid-template-columns: 4fr 3fr;
   grid-template-rows: auto repeat(3, 15rem) auto;
@@ -144,31 +154,38 @@ nav {
 
 /* MOVEMENTS */
 .movements {
+  display: flex;
+  flex-direction: column;
+
   grid-row: 2 / span 3;
   background-color: #fff;
   border-radius: 1rem;
-  overflow: scroll;
+  overflow: auto;
 }
 
 .movements__row {
   padding: 2.25rem 4rem;
-  display: flex;
+  display: grid;
+  grid-template-columns: 0.5fr 1fr 100px;
   align-items: center;
   border-bottom: 1px solid #eee;
 }
 
 .movements__type {
+  text-align: justify;
   font-size: 1.1rem;
   text-transform: uppercase;
+
   font-weight: 500;
   color: #fff;
-  padding: 0.1rem 1rem;
+  padding: 0.3rem 1rem;
   border-radius: 10rem;
-  margin-right: 2rem;
 }
 
 .movements__date {
   font-size: 1.1rem;
+  justify-self: center;
+  text-align: justify;
   text-transform: uppercase;
   font-weight: 500;
   color: #666;
@@ -176,15 +193,19 @@ nav {
 
 .movements__type--deposit {
   background-image: linear-gradient(to top left, #39b385, #9be15d);
+  text-align: center;
 }
 
 .movements__type--withdrawal {
   background-image: linear-gradient(to top left, #e52a5a, #ff585f);
+  text-align: center;
 }
 
 .movements__value {
   font-size: 1.7rem;
+  justify-self: end;
   margin-left: auto;
+  text-align: right;
 }
 
 /* SUMMARY */
