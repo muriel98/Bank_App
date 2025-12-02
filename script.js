@@ -1,12 +1,8 @@
 'use strict';
 
-/////////////////////////////////////////////////
-/////////////////////////////////////////////////
-// BANKIST APP
-
 // Data
 const account1 = {
-  owner: 'Jonas Schmedtmann',
+  owner: 'Muriel García',
   movements: [200, 455.23, -306.5, 25000, -642.21, -133.9, 79.97, 1300],
   interestRate: 1.2, // %
   pin: 1111,
@@ -22,11 +18,11 @@ const account1 = {
     '2025-09-30T10:51:36.790Z',
   ],
   currency: 'EUR',
-  locale: 'pt-PT', // de-DE
+  locale: 'es-ES', // de-DE
 };
 
 const account2 = {
-  owner: 'Jessica Davis',
+  owner: 'Carmen García',
   movements: [5000, 3400, -150, -790, -3210, -1000, 8500, -30],
   interestRate: 1.5,
   pin: 2222,
@@ -41,8 +37,8 @@ const account2 = {
     '2020-06-25T18:49:59.371Z',
     '2020-07-26T12:01:20.894Z',
   ],
-  currency: 'USD',
-  locale: 'en-US',
+  currency: 'EUR',
+  locale: 'es-ES',
 };
 
 const accounts = [account1, account2];
@@ -55,6 +51,7 @@ const labelSumIn = document.querySelector('.summary__value--in');
 const labelSumOut = document.querySelector('.summary__value--out');
 const labelSumInterest = document.querySelector('.summary__value--interest');
 const labelTimer = document.querySelector('.timer');
+const titleLogo = document.querySelector('.logo_title');
 
 const containerApp = document.querySelector('.app');
 const containerMovements = document.querySelector('.movements');
@@ -258,10 +255,12 @@ btnLogin.addEventListener('click', function (event) {
     gsap.to('.logo', {
       duration: 1.2,
       scale: 0.55,
-      yPercent: -170,
+      yPercent: -120,
       transformOrigin: 'top center',
       ease: 'power3.out',
     });
+    titleLogo.classList.add('fade_out');
+
     //Experimenting API
     const now = new Date();
 
@@ -283,9 +282,10 @@ btnLogin.addEventListener('click', function (event) {
     //Display logout button
 
     btnLogOut.classList.add('fade_in');
+    btnLogin.classList.add('fade_out');
 
     //Display UI and message
-    labelWelcome.textContent = `Welcome back ${
+    labelWelcome.textContent = `Bienvenido, ${
       currentAccount.owner.split(' ')[0]
     } `;
     containerApp.style.opacity = 100;

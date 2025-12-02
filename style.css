@@ -19,9 +19,10 @@ body {
   font-family: 'Poppins', sans-serif;
   color: #8a8a8a;
   background-color: #ffffff;
+  justify-content: center;
   padding: 2rem;
   display: flex;
-  margin-top: 5%;
+  margin-top: 6%;
   align-items: center;
   height: 60vh;
 }
@@ -30,7 +31,7 @@ nav {
   position: absolute;
   z-index: 2;
   top: 40%;
-  left: 45%;
+  justify-content: center;
 
   height: 10.25rem;
 }
@@ -40,40 +41,51 @@ nav img {
 }
 
 .welcome {
-  position: fixed;
-  top: 5%;
+  color: #202020;
   left: 5;
-  font-size: 1.9rem;
+  margin-top: -55rem;
+  font-size: 1.4rem;
   font-weight: 500;
 }
 
 .logo {
   position: absolute;
-
-  left: 25%;
+  justify-items: center;
+  margin-top: 5rem;
+  margin-left: 3.5rem;
   height: 10.25rem;
 }
+
+.logo_title {
+  width: 270px;
+  justify-items: center;
+  margin-left: 3%;
+  margin-top: -42%;
+  margin-bottom: -30%;
+}
+
 .logout__btn img {
-  width: 2.5rem;
+  width: 1.5rem;
   color: gray;
   position: fixed;
-  right: 5%;
-  top: 5%;
+  justify-content: left;
+  top: 8%;
+  margin-left: 4%;
   transition: all 1s ease;
 }
 
 .login__input {
   border: none;
   padding: 0.5rem 2rem;
-  font-size: 2rem;
+  align-content: center;
+  font-size: 1.4rem;
   font-family: inherit;
   text-align: center;
-
-  width: 12rem;
+  width: 15rem;
   border-radius: 10rem;
 
   color: inherit;
-  border: 1px solid #c3c2c2;
+  border: 0.2px solid #c3c2c2;
   transition: all 0.3s;
 }
 .fade_out {
@@ -148,7 +160,7 @@ nav img {
 }
 
 .balance__value {
-  font-size: 4.5rem;
+  font-size: 2.5rem;
   font-weight: 400;
 }
 
@@ -192,13 +204,17 @@ nav img {
 }
 
 .movements__type--deposit {
-  background-image: linear-gradient(to top left, #39b385, #9be15d);
+  /*background-image: linear-gradient(to top left, #39b385, #275400);*/
+  color: #097538;
   text-align: center;
+  font-weight: bold;
 }
 
 .movements__type--withdrawal {
-  background-image: linear-gradient(to top left, #e52a5a, #ff585f);
+  /*background-image: linear-gradient(to top left, #a40000, #540004);*/
+  color: #6e1b1b;
   text-align: center;
+  font-weight: bold;
 }
 
 .movements__value {
@@ -231,11 +247,11 @@ nav img {
 
 .summary__value--in,
 .summary__value--interest {
-  color: #66c873;
+  color: #097538;
 }
 
 .summary__value--out {
-  color: #f5465d;
+  color: #6e1b1b;
 }
 
 .btn--sort {
@@ -255,26 +271,33 @@ nav img {
 }
 
 .operation--transfer {
-  background-image: linear-gradient(to top left, #ffb003, #ffcb03);
+  /* background-image: linear-gradient(to top left, #ffb003, #ffcb03);*/
+  background-color: #f4d095;
 }
 
 .operation--loan {
-  background-image: linear-gradient(to top left, #39b385, #9be15d);
+  background-color: #d0d0d0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .operation--close {
-  background-image: linear-gradient(to top left, #e52a5a, #ff585f);
+  background-color: #f4d095;
 }
 
 h2 {
   margin-bottom: 1.5rem;
+  margin-top: -1rem;
   font-size: 1.7rem;
   font-weight: 600;
+  text-align: center;
   color: #333;
 }
 
 .form {
   display: grid;
+  justify-content: center;
   grid-template-columns: 2.5fr 2.5fr 1fr;
   grid-template-rows: auto auto;
   gap: 0.4rem 1rem;
@@ -283,6 +306,7 @@ h2 {
 /* Exceptions for interst */
 .form.form--loan {
   grid-template-columns: 2.5fr 1fr 2.5fr;
+  margin-left: 10rem;
 }
 .form__label--loan {
   grid-row: 2;
