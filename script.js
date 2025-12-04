@@ -207,6 +207,7 @@ const logout = function () {
   inputLoginUsername.classList.remove('fade_out');
   inputLoginPin.classList.remove('fade_out');
   btnLogOut.classList.remove('fade_in');
+  titleLogo.classList.remove('fade_out');
   gsap.to('.logo', {
     duration: 1,
     scale: 1,
@@ -285,7 +286,7 @@ btnLogin.addEventListener('click', function (event) {
     btnLogin.classList.add('fade_out');
 
     //Display UI and message
-    labelWelcome.textContent = `Bienvenido, ${
+    labelWelcome.textContent = `Bienvenido/a, ${
       currentAccount.owner.split(' ')[0]
     } `;
     containerApp.style.opacity = 100;
