@@ -68,7 +68,7 @@ El código está organizado para separar responsabilidades:
     └── bankLogic.test.js      # Pruebas para las funciones de negocio.
 
 
-📝 Pruebas Unitarias Implementadas
+/// Pruebas Unitarias Implementadas ///
 
 He implementado una sólida cobertura de pruebas para:
 
