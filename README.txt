@@ -68,7 +68,7 @@ El código está organizado para separar responsabilidades:
     └── bankLogic.test.js      # Pruebas para las funciones de negocio.
 
 
-📝 Pruebas Unitarias Implementadas
+/// Pruebas Unitarias Implementadas ///
 
 He implementado una sólida cobertura de pruebas para:
 
@@ -77,3 +77,4 @@ createUsernames: Validación de mayúsculas, minúsculas y múltiples espacios.
 calculateBalance: Verificación de saldo en casos mixtos, vacíos y solo negativos.
 
 transferMoney: Validación de saldo suficiente, cuenta de destino y confirmación de mutación correcta en los arrays de movements (casos de éxito y fallo).
+
