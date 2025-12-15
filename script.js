@@ -207,7 +207,7 @@ const logout = function () {
   inputLoginUsername.classList.remove('fade_out');
   inputLoginPin.classList.remove('fade_out');
   btnLogOut.classList.remove('fade_in');
-  titleLogo.classList.remove('fade_out');
+  titleLogo.classList.add('fade_in');
   gsap.to('.logo', {
     duration: 1,
     scale: 1,

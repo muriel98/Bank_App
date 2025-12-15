@@ -350,6 +350,14 @@ h2 {
   background-color: rgba(255, 255, 255, 0.8);
 }
 
+.credentials {
+  color: #a3a3a3;
+  font-size: 1rem;
+  justify-self: center;
+  margin-top: 5rem;
+  margin-right: 6rem;
+}
+
 .logout-timer {
   padding: 0 0.3rem;
   margin-top: 1.9rem;
