@@ -55,14 +55,20 @@ const titleLogo = document.querySelector('.logo_title');
 
 const containerApp = document.querySelector('.app');
 const containerMovements = document.querySelector('.movements');
+const signUpForm = document.querySelector('.sign-up-form');
+const containerFirstPage = document.querySelector('.first-page');
 
 const btnLogin = document.querySelector('.login__btn');
+const btnCreateAccount = document.querySelector('.create-account');
 const btnTransfer = document.querySelector('.form__btn--transfer');
 const btnLoan = document.querySelector('.form__btn--loan');
 const btnClose = document.querySelector('.form__btn--close');
 const btnSort = document.querySelector('.btn--sort');
 const btnLogOut = document.querySelector('.logout__btn');
+const btnSignUp = document.querySelector('.sign-up-link');
 
+const inputUserName = document.querySelector('.username');
+const inputPin = document.querySelector('.pin');
 const inputLoginUsername = document.querySelector('.login__input--user');
 const inputLoginPin = document.querySelector('.login__input--pin');
 const inputTransferTo = document.querySelector('.form__input--to');
@@ -176,18 +182,16 @@ const calcDisplaySummary = function (account) {
 };
 
 //Creates username in each object
-const createUsernames = function (accs) {
-  accs.forEach(function (acc) {
-    acc.username = acc.owner
-      .toLowerCase()
-      .split(' ')
-      .map(name => name[0])
-      .join('');
-  });
+const createUsernames = function (acc) {
+  acc.username = acc.owner
+    .toLowerCase()
+    .split(' ')
+    .map(name => name[0])
+    .join('');
 };
 
-createUsernames(accounts);
-console.log(accounts);
+createUsernames(account1);
+createUsernames(account2);
 
 let currentAccount;
 
@@ -238,6 +242,38 @@ const startLogOutTimer = function () {
 };
 
 // ---------------------- EVENTS -------------------
+
+//Create User
+btnCreateAccount.addEventListener('click', function (e) {
+  e.preventDefault();
+  const name = inputUserName.value;
+  const pin = Number(inputPin.value);
+
+  const newAccount = {
+    owner: name,
+    movements: [],
+    interestRate: 1.2,
+    pin: pin,
+    movementsDates: [],
+    currency: 'EUR',
+    locale: 'es-ES',
+  };
+  createUsernames(newAccount);
+
+  //Check duplicated usernames
+  if (
+    accounts.some(
+      account =>
+        account.owner.toLocaleLowerCase() === newAccount.owner.toLowerCase()
+    )
+  ) {
+    alert('Existe');
+    return;
+  }
+  accounts.push(newAccount);
+  console.log(accounts);
+});
+
 //Login function
 btnLogin.addEventListener('click', function (event) {
   //Prevent form from submitting
@@ -313,6 +349,48 @@ btnLogin.addEventListener('click', function (event) {
   }
 });
 
+//Loan function
+//Only accept when any deposit > 10% of the request
+btnLoan.addEventListener('click', function (e) {
+  e.preventDefault();
+
+  //Inizializing timer
+  if (timer) clearInterval(timer);
+  timer = startLogOutTimer();
+
+  const amount = Math.floor(Number(inputLoanAmount.value));
+
+  if (amount > 0 && currentAccount.movements.some(mov => mov >= amount * 0.1)) {
+    setTimeout(function () {
+      currentAccount.movements.push(amount);
+
+      //Adding date to loan
+      currentAccount.movementsDates.push(new Date().toISOString());
+
+      updateUI(currentAccount);
+    }, 3000);
+  }
+  inputLoanAmount.value = '';
+  inputLoanAmount.blur();
+
+  if (timer) {
+    clearInterval(timer);
+    timer = startLogOutTimer();
+  }
+});
+
+const showSignUpForm = function () {
+  signUpForm.classList.add('fade_in');
+  containerFirstPage.classList.add('fade_out');
+  gsap.to('.sign-up', {
+    duration: 0.6,
+    yPercent: -70,
+    ease: 'power1.inOut',
+  });
+};
+
+//  ***EVENT LISTENERS***
+
 //Transfer money Function
 btnTransfer.addEventListener('click', function (e) {
   e.preventDefault();
@@ -345,36 +423,6 @@ btnTransfer.addEventListener('click', function (e) {
   }
 });
 
-//Loan function
-//Only accept when any deposit > 10% of the request
-btnLoan.addEventListener('click', function (e) {
-  e.preventDefault();
-
-  //Inizializing timer
-  if (timer) clearInterval(timer);
-  timer = startLogOutTimer();
-
-  const amount = Math.floor(Number(inputLoanAmount.value));
-
-  if (amount > 0 && currentAccount.movements.some(mov => mov >= amount * 0.1)) {
-    setTimeout(function () {
-      currentAccount.movements.push(amount);
-
-      //Adding date to loan
-      currentAccount.movementsDates.push(new Date().toISOString());
-
-      updateUI(currentAccount);
-    }, 3000);
-  }
-  inputLoanAmount.value = '';
-  inputLoanAmount.blur();
-
-  if (timer) {
-    clearInterval(timer);
-    timer = startLogOutTimer();
-  }
-});
-
 //Delete account Function
 btnClose.addEventListener('click', function (e) {
   e.preventDefault();
@@ -390,7 +438,6 @@ btnClose.addEventListener('click', function (e) {
     inputCloseUsername.value = inputClosePin.value = '';
   }
 });
-
 //Logout Function
 btnLogOut.addEventListener('click', function (e) {
   e.preventDefault();
@@ -403,4 +450,8 @@ btnSort.addEventListener('click', function (e) {
   e.preventDefault();
   displayMovements(currentAccount, !sorted);
   sorted = !sorted;
+});
+
+btnSignUp.addEventListener('click', function (e) {
+  showSignUpForm();
 });
