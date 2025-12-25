@@ -52,11 +52,14 @@ const labelSumOut = document.querySelector('.summary__value--out');
 const labelSumInterest = document.querySelector('.summary__value--interest');
 const labelTimer = document.querySelector('.timer');
 const titleLogo = document.querySelector('.logo_title');
+const createAccountText = document.querySelector('.create-account-text');
 
 const containerApp = document.querySelector('.app');
 const containerMovements = document.querySelector('.movements');
 const signUpForm = document.querySelector('.sign-up-form');
 const containerFirstPage = document.querySelector('.first-page');
+const containerMessage = document.querySelector('.message');
+const formContainer = document.querySelector('.sign-up');
 
 const btnLogin = document.querySelector('.login__btn');
 const btnCreateAccount = document.querySelector('.create-account');
@@ -208,10 +211,8 @@ const updateUI = function (acc) {
 const logout = function () {
   containerApp.style.opacity = 0;
   labelWelcome.textContent = '';
-  inputLoginUsername.classList.remove('fade_out');
-  inputLoginPin.classList.remove('fade_out');
+  showLogoPage();
   btnLogOut.classList.remove('fade_in');
-  titleLogo.classList.add('fade_in');
   gsap.to('.logo', {
     duration: 1,
     scale: 1,
@@ -241,13 +242,62 @@ const startLogOutTimer = function () {
   return timer;
 };
 
+
+const renderMessage = function (message, type = 'succes', hideForm = true) {
+  //Hide Form
+  if (hideForm) {
+    signUpForm.classList.add('fade_out');
+    createAccountText.classList.add('fade_out');
+
+    setTimeout(() => {
+      signUpForm.classList.add('hidden');
+    }, 200);
+  }
+
+  //Show message
+  containerMessage.textContent = message;
+  containerMessage.classList.add(`message--${type}`);
+  containerMessage.classList.add('fade_in');
+
+  setTimeout(() => {
+    containerMessage.classList.add('hidden');
+  }, 1800);
+};
+
+const showLogoPage = function () {
+  setTimeout(() => {
+    createAccountText.classList.remove('fade_out');
+    //Go to initial page
+    containerFirstPage.classList.remove('hidden');
+    containerFirstPage.classList.add('fade_in');
+  }, 1800);
+};
+
+const showSignUpForm = function () {
+  signUpForm.classList.remove('hidden', 'fade_out');
+  signUpForm.classList.add('fade_in');
+  containerFirstPage.classList.add('fade_out');
+  gsap.to('.sign-up', {
+    duration: 0.6,
+    yPercent: -70,
+    ease: 'power1.inOut',
+  });
+};
+
 // ---------------------- EVENTS -------------------
 
 //Create User
 btnCreateAccount.addEventListener('click', function (e) {
   e.preventDefault();
+
   const name = inputUserName.value;
   const pin = Number(inputPin.value);
+
+  if (!name || !pin) {
+    renderMessage('Rellena ambos campos para crear un usuario', 'error', false);
+
+    return;
+  }
 
   const newAccount = {
     owner: name,
@@ -267,11 +317,16 @@ btnCreateAccount.addEventListener('click', function (e) {
         account.owner.toLocaleLowerCase() === newAccount.owner.toLowerCase()
     )
   ) {
-    alert('Existe');
+    renderMessage(
+      'Parece que ya tienes una cuenta con nosotros, prueba a iniciar sesión',
+      'error'
+    );
+    showSignUpForm();
     return;
   }
   accounts.push(newAccount);
-  console.log(accounts);
+  renderMessage('Cuenta creada con éxito', 'success');
+  showLogoPage();
 });
 
 //Login function
@@ -284,8 +339,12 @@ btnLogin.addEventListener('click', function (event) {
   timer = startLogOutTimer();
 
   currentAccount = accounts.find(
-    acc => acc.username === inputLoginUsername.value
+    acc =>
+      acc.username === inputLoginUsername.value ||
+      acc.owner === inputLoginUsername.value
   );
+
+  console.log(currentAccount.pin);
 
   if (currentAccount.pin === +inputLoginPin.value) {
     //Logo Animation with GSAP
@@ -296,7 +355,10 @@ btnLogin.addEventListener('click', function (event) {
       transformOrigin: 'top center',
       ease: 'power3.out',
     });
-    titleLogo.classList.add('fade_out');
+    containerFirstPage.classList.remove('fade_in');
+    containerFirstPage.classList.add('fade_out');
+    containerFirstPage.classList.add('fade_out');
+    createAccountText.classList.add('fade_out');
 
     //Experimenting API
     const now = new Date();
@@ -332,8 +394,6 @@ btnLogin.addEventListener('click', function (event) {
     inputLoginPin.value = '';
 
     //make pin lose the focus
-    inputLoginUsername.classList.add('fade_out');
-    inputLoginPin.classList.add('fade_out');
     inputLoginPin.blur();
     updateUI(currentAccount);
 
@@ -379,17 +439,7 @@ btnLoan.addEventListener('click', function (e) {
   }
 });
 
-const showSignUpForm = function () {
-  signUpForm.classList.add('fade_in');
-  containerFirstPage.classList.add('fade_out');
-  gsap.to('.sign-up', {
-    duration: 0.6,
-    yPercent: -70,
-    ease: 'power1.inOut',
-  });
-};
 
-//  ***EVENT LISTENERS***
 
 //Transfer money Function
 btnTransfer.addEventListener('click', function (e) {
@@ -451,7 +501,9 @@ btnSort.addEventListener('click', function (e) {
   displayMovements(currentAccount, !sorted);
   sorted = !sorted;
 });
-
+//btnSignUp
 btnSignUp.addEventListener('click', function (e) {
+  e.preventDefault();
   showSignUpForm();
+  console.log('click');
 });
