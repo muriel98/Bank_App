@@ -25,8 +25,8 @@ class View {
   btnLogOut = document.querySelector('.logout__btn');
   btnSignUp = document.querySelector('.sign-up-link');
 
-  inputUserName = document.querySelector('.username');
-  inputPin = document.querySelector('.pin');
+  inputSignUpUserName = document.querySelector('.sign-up-username');
+  inputSignUpPin = document.querySelector('.sign-up-pin');
   inputLoginUsername = document.querySelector('.login__input--user');
   inputLoginPin = document.querySelector('.login__input--pin');
   inputTransferTo = document.querySelector('.form__input--to');
@@ -40,7 +40,6 @@ class View {
       Math.round(Math.abs(date2 - date1) / (1000 * 60 * 60 * 24));
 
     const daysPassed = calcDaysPassed(new Date(), dateLabel);
-    console.log(daysPassed);
 
     if (daysPassed === 0) return 'Today';
     if (daysPassed === 1) return 'Yesterday';
@@ -55,6 +54,131 @@ class View {
       currency: currency,
     }).format(value);
   }
+
+  updateTimer(time) {
+    const min = String(Math.trunc(time / 60)).padStart(2, 0);
+    const sec = String(time % 60).padStart(2, 0);
+    this.labelTimer.textContent = `${min} : ${sec} `;
+  }
+
+  animateLogin() {
+    //Logo Animation with GSAP
+    gsap.to('.logo', {
+      duration: 1.2,
+      scale: 0.55,
+      yPercent: -120,
+      transformOrigin: 'top center',
+      ease: 'power3.out',
+    });
+    this.containerFirstPage.classList.remove('fade_in');
+    this.containerFirstPage.classList.add('fade_out');
+    this.createAccountText.classList.add('fade_out');
+    //Display logout button
+    this.btnLogOut.classList.add('fade_in');
+    this.btnLogin.classList.add('fade_out');
+  }
+
+  displayHeaderDate(acc) {
+    //Experimenting API
+    const now = new Date();
+
+    //Internationalizing Date
+    const options = {
+      hour: 'numeric',
+      minute: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      year: 'numeric',
+    };
+
+    //const locale = navigator.language;
+    this.labelDate.textContent = new Intl.DateTimeFormat(
+      acc.locale,
+      options
+    ).format(now);
+  }
+
+  showApp(acc) {
+    //Display UI and message
+    this.labelWelcome.textContent = `Bienvenido/a, ${acc.owner.split(' ')[0]} `;
+    this.containerApp.style.opacity = 100;
+
+    //Clear user and pin fields
+    this.inputLoginUsername.value = '';
+    this.inputLoginPin.value = '';
+
+    //make pin lose the focus
+    this.inputLoginPin.blur();
+  }
+
+  rowsStyle() {
+    //Add different style to even rows
+    [...document.querySelectorAll('.movements__row')].forEach(function (
+      row,
+      index
+    ) {
+      if (index % 2 === 0) {
+        row.style.backgroundColor = '#f0f0f0ff';
+      }
+    });
+  }
+
+  logout() {
+    this.containerApp.style.opacity = 0;
+    this.labelWelcome.textContent = '';
+    this.showLogoPage();
+    this.btnLogOut.classList.remove('fade_in');
+    gsap.to('.logo', {
+      duration: 1,
+      scale: 1,
+      yPercent: 0,
+      ease: 'power3.inOut',
+    });
+  }
+
+  getLoginData() {
+    return {
+      user: this.inputLoginUsername.value,
+      pin: +this.inputLoginPin.value,
+    };
+  }
+
+  getSignUpData() {
+    return {
+      user: this.inputSignUpUserName.value,
+      pin: +this.inputSignUpPin.value,
+    };
+  }
+
+  getLoanAmount() {
+    const amount = Math.floor(Number(this.inputLoanAmount.value));
+    this.inputLoanAmount.value = '';
+    this.inputLoanAmount.blur();
+
+    return amount;
+  }
+
+  getTransferData() {
+    const data = {
+      to: this.inputTransferTo.value,
+      amount: Number(this.inputTransferAmount.value),
+    };
+    this.inputTransferTo.value = this.inputTransferAmount.value = '';
+    this.inputTransferAmount.blur();
+    return data;
+  }
+
+  getCloseAccountData() {
+    const user = this.inputCloseUsername.value;
+    const pin = +this.inputClosePin.value;
+    this.inputCloseUsername.value = this.inputClosePin.value = '';
+
+    return { user, pin };
+  }
+
+  hideUI = function () {
+    this.containerApp.style.opacity = 0;
+  };
 
   //Updates movements in the interface
   displayMovements(acc, sort = false) {
@@ -80,7 +204,7 @@ class View {
         acc.locale,
         acc.currency
       );
-      console.log(formatedMov);
+
       const html = `<div class="movements__row">
        <div class="movements__type      movements__type--${type}">
       ${i + 1}
@@ -115,18 +239,7 @@ class View {
       account.currency
     )}`;
   }
-  logout() {
-    this.containerApp.style.opacity = 0;
-    this.labelWelcome.textContent = '';
-    this.showLogoPage();
-    this.btnLogOut.classList.remove('fade_in');
-    gsap.to('.logo', {
-      duration: 1,
-      scale: 1,
-      yPercent: 0,
-      ease: 'power3.inOut',
-    });
-  }
+
   renderMessage(message, type = 'succes', hideForm = true) {
     //Hide Form
     if (hideForm) {

@@ -38,6 +38,11 @@ const account2 = {
   locale: 'es-ES',
 };
 
+export const state = {
+  accounts: [account1, account2],
+  currentAccount: null,
+};
+
 export const accounts = [account1, account2];
 
 const createUsernames = function (acc) {
@@ -47,5 +52,49 @@ const createUsernames = function (acc) {
     .map(name => name[0])
     .join('');
 };
+state.accounts.forEach(createUsernames);
 
-accounts.forEach(createUsernames);
+export const requestLoan = function (amount) {
+  state.currentAccount.movements.push(amount);
+
+  //Adding date to loan
+  state.currentAccount.movementsDates.push(new Date().toISOString());
+};
+
+export const createAccount = function (owner, pin) {
+  //Check duplicated usernames
+  const exists = state.accounts.some(
+    account => account.owner.toLocaleLowerCase() === owner.toLowerCase()
+  );
+  if (exists) return false;
+
+  const newAccount = {
+    owner: owner,
+    movements: [],
+    interestRate: 1.2,
+    pin: pin,
+    movementsDates: [],
+    currency: 'EUR',
+    locale: 'es-ES',
+  };
+  createUsernames(newAccount);
+  state.accounts.push(newAccount);
+  return true;
+};
+
+export const deleteAccount = function () {
+  const index = state.accounts.findIndex(
+    acc => acc.username === state.currentAccount.username
+  );
+  state.accounts.splice(index, 1);
+  state.currentAccount = null;
+};
+
+export const transferMoney = function (toAcc, amount) {
+  state.currentAccount.movements.push(-amount);
+  toAcc.movements.push(amount);
+
+  //Adding date to transfers
+  state.currentAccount.movementsDates.push(new Date().toISOString());
+  toAcc.movementsDates.push(new Date().toISOString());
+};

@@ -224,6 +224,7 @@ const logout = function () {
 let timer;
 
 const startLogOutTimer = function () {
+  let time = 200;
   const tick = function () {
     const min = String(Math.trunc(time / 60)).padStart(2, 0);
     const sec = String(time % 60).padStart(2, 0);
@@ -235,13 +236,11 @@ const startLogOutTimer = function () {
     }
     time--;
   };
-  let time = 200;
 
   tick();
   const timer = setInterval(tick, 1000);
   return timer;
 };
-
 
 const renderMessage = function (message, type = 'succes', hideForm = true) {
   //Hide Form
@@ -438,8 +437,6 @@ btnLoan.addEventListener('click', function (e) {
     timer = startLogOutTimer();
   }
 });
-
-
 
 //Transfer money Function
 btnTransfer.addEventListener('click', function (e) {
