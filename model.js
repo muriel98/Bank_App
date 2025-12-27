@@ -59,6 +59,7 @@ export const requestLoan = function (amount) {
 
   //Adding date to loan
   state.currentAccount.movementsDates.push(new Date().toISOString());
+  saveAccounts();
 };
 
 export const createAccount = function (owner, pin) {
@@ -79,6 +80,7 @@ export const createAccount = function (owner, pin) {
   };
   createUsernames(newAccount);
   state.accounts.push(newAccount);
+  saveAccounts();
   return true;
 };
 
@@ -88,6 +90,7 @@ export const deleteAccount = function () {
   );
   state.accounts.splice(index, 1);
   state.currentAccount = null;
+  saveAccounts();
 };
 
 export const transferMoney = function (toAcc, amount) {
@@ -97,4 +100,18 @@ export const transferMoney = function (toAcc, amount) {
   //Adding date to transfers
   state.currentAccount.movementsDates.push(new Date().toISOString());
   toAcc.movementsDates.push(new Date().toISOString());
+  saveAccounts();
+};
+
+//******************** LOCAL STORAGE ************
+const saveAccounts = function () {
+  localStorage.setItem('accounts', JSON.stringify(state.accounts));
+};
+
+export const loadStorage = function () {
+  const storage = loadStorage.getItem('accounts');
+
+  if (storage) {
+    state.accounts = JSON.parse(storage);
+  }
 };

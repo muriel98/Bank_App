@@ -27,6 +27,7 @@ const controlCreateAccount = function () {
       'error',
       false
     );
+    view.resetSignUp();
 
     return;
   }
@@ -36,6 +37,7 @@ const controlCreateAccount = function () {
       'Parece que ya tienes una cuenta con nosotros, prueba a iniciar sesión',
       'error'
     );
+    view.resetSignUp();
     view.showSignUpForm();
   } else {
     view.renderMessage('Cuenta creada con éxito', 'success');
@@ -70,6 +72,9 @@ const controlLogin = function () {
 
     updateUI(model.state.currentAccount);
     view.rowsStyle();
+  } else {
+    view.renderMessage('Los datos no son correctos', 'error', false);
+    view.resetLogin();
   }
 };
 

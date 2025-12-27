@@ -78,6 +78,20 @@ class View {
     this.btnLogin.classList.add('fade_out');
   }
 
+  clearInputs(inputs) {
+    inputs.forEach(input => {
+      input.value = '';
+      input.blur();
+    });
+  }
+  resetLogin() {
+    this.clearInputs([this.inputLoginUsername, this.inputLoginPin]);
+  }
+
+  resetSignUp() {
+    this.clearInputs([this.inputSignUpUserName, this.inputSignUpPin]);
+    console.log('entra');
+  }
   displayHeaderDate(acc) {
     //Experimenting API
     const now = new Date();
@@ -241,6 +255,8 @@ class View {
   }
 
   renderMessage(message, type = 'succes', hideForm = true) {
+    //reset
+    this.containerMessage.classList.remove('hidden');
     //Hide Form
     if (hideForm) {
       this.signUpForm.classList.add('fade_out');
@@ -258,6 +274,7 @@ class View {
 
     setTimeout(() => {
       this.containerMessage.classList.add('hidden');
+      this.containerMessage.classList.remove(`message--${type}`);
     }, 1800);
   }
 
@@ -271,9 +288,13 @@ class View {
   }
 
   showSignUpForm() {
-    this.signUpForm.classList.remove('hidden', 'fade_out');
-    this.signUpForm.classList.add('fade_in');
+    //Reset
+    this.signUpForm.classList.remove('hidden', 'fade_out', 'fade_in');
+    this.containerFirstPage.classList.remove('fade_in', 'hidden');
+
     this.containerFirstPage.classList.add('fade_out');
+
+    this.signUpForm.classList.add('fade_in');
     gsap.to('.sign-up', {
       duration: 0.6,
       yPercent: -70,
