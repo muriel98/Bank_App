@@ -147,6 +147,7 @@ const controlLogOut = function () {
 
 const controlSorted = function () {
   view.displayMovements(model.state.currentAccount, !sorted);
+  view.rowsStyle();
   sorted = !sorted;
 };
 

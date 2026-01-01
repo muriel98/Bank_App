@@ -103,44 +103,20 @@ const formatCurrencies = function (value, locale, currency) {
     currency: currency,
   }).format(value);
 };
-
-//Updates movements in the interface
-const displayMovements = function (acc, sort = false) {
-  containerMovements.innerHTML = '';
-
-  const combinedMovsDates = acc.movements.map((mov, i) => ({
-    movements: mov,
-    date2: acc.movementsDates.at(i),
-  }));
-
-  if (sort) combinedMovsDates.sort((a, b) => a.movements - b.movements);
-
-  combinedMovsDates.forEach(function (obj, i) {
-    const { movements, date2 } = obj;
-
-    const type = movements > 0 ? 'deposit' : 'withdrawal';
-
-    const date = new Date(acc.movementsDates[i]);
-    const movDate = formatMovementDate(date, acc.locale);
-
-    const formatedMov = formatCurrencies(
-      obj.movements,
-      acc.locale,
-      acc.currency
-    );
-    console.log(formatedMov);
-    const html = `<div class="movements__row">
-       <div class="movements__type      movements__type--${type}">
-      ${i + 1}
-       ${type} </div>
-        <div class="movements__date">${movDate} </div>
-      <div class="movements__value">${formatedMov}
-      </div>
-      </div>`;
-
-    containerMovements.insertAdjacentHTML('afterbegin', html);
+const styleRows = function () {
+  //Add different style to even rows
+  console.log('prueba');
+  [...document.querySelectorAll('.movements__row')].forEach(function (
+    row,
+    index
+  ) {
+    if (index % 2 === 0) {
+      row.style.backgroundColor = '#f0f0f0ff';
+    }
   });
 };
+
+//Updates movements in the interface
 
 //Calculates and displays the balance
 const calcDisplayBalance = function (acc) {
@@ -395,16 +371,6 @@ btnLogin.addEventListener('click', function (event) {
     //make pin lose the focus
     inputLoginPin.blur();
     updateUI(currentAccount);
-
-    //Add different style to even rows
-    [...document.querySelectorAll('.movements__row')].forEach(function (
-      row,
-      index
-    ) {
-      if (index % 2 === 0) {
-        row.style.backgroundColor = '#f0f0f0ff';
-      }
-    });
   }
 });
 
@@ -496,6 +462,7 @@ let sorted = false;
 btnSort.addEventListener('click', function (e) {
   e.preventDefault();
   displayMovements(currentAccount, !sorted);
+
   sorted = !sorted;
 });
 //btnSignUp
