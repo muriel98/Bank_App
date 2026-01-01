@@ -109,7 +109,7 @@ const saveAccounts = function () {
 };
 
 export const loadStorage = function () {
-  const storage = loadStorage.getItem('accounts');
+  const storage = localStorage.getItem('accounts');
 
   if (storage) {
     state.accounts = JSON.parse(storage);
