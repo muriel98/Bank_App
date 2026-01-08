@@ -3,6 +3,7 @@ import view from './view.js';
 
 let timer;
 let sorted = false;
+
 const startLogOutTimer = function () {
   let time = 200;
   const tick = function () {
@@ -16,6 +17,13 @@ const startLogOutTimer = function () {
   tick();
   timer = setInterval(tick, 1000);
   return timer;
+};
+
+const formatCurrencies = function (value, locale, currency) {
+  return new Intl.NumberFormat(locale, {
+    style: 'currency',
+    currency: currency,
+  }).format(value);
 };
 
 const controlCreateAccount = function () {
@@ -45,13 +53,56 @@ const controlCreateAccount = function () {
   }
 };
 
+//Calculates and displays the summary
+const calcDisplaySummary = function (account) {
+  const inMoney = account.movements
+    .filter(mov => mov > 0)
+    .reduce((acc, mov) => acc + mov, 0);
+  const plusMoney = `${formatCurrencies(
+    inMoney,
+    account.locale,
+    account.currency
+  )}`;
+
+  const outMoney = account.movements
+    .filter(mov => mov < 0)
+    .reduce((acc, mov) => acc + mov, 0);
+  const minusMoney = `${formatCurrencies(
+    Math.abs(outMoney),
+    account.locale,
+    account.currency
+  )}`;
+
+  //Interests
+  const interest = account.movements
+    .filter(mov => mov > 0)
+    .map(deposit => (deposit * account.interestRate) / 100)
+    .reduce((acc, dep) => acc + dep, 0);
+  const totalInterest = `${formatCurrencies(
+    interest,
+    account.locale,
+    account.currency
+  )}`;
+  view.displaySummary(plusMoney, minusMoney, totalInterest);
+};
+
+const calcBalance = function (acc) {
+  acc.balance = acc.movements.reduce((acc, mov) => acc + mov, 0);
+  const totalBalance = `${formatCurrencies(
+    acc.balance,
+    acc.locale,
+    acc.currency
+  )}`;
+  view.DisplayBalance(totalBalance);
+};
+
 const updateUI = function (acc) {
   //Display movements
   view.displayMovements(acc);
   //Display Balance
-  view.calcDisplayBalance(acc);
+  calcBalance(acc);
   //Display Sumary
-  view.calcDisplaySummary(acc);
+  calcDisplaySummary(acc);
 };
 
 //Login function

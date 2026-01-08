@@ -208,7 +208,7 @@ class View {
     combinedMovsDates.forEach((obj, i) => {
       const { movements, date2 } = obj;
 
-      const type = movements > 0 ? 'deposit' : 'withdrawal';
+      const type = movements > 0 ? 'depósito' : 'retiro';
 
       const date = new Date(acc.movementsDates[i]);
       const movDate = this.formatMovementDate(date, acc.locale);
@@ -233,25 +233,14 @@ class View {
   }
 
   //Calculates and displays the balance
-  calcDisplayBalance(acc) {
-    acc.balance = acc.movements.reduce((acc, mov) => acc + mov, 0);
-    this.labelBalance.textContent = `${this.formatCurrencies(
-      acc.balance,
-      acc.locale,
-      acc.currency
-    )}`;
+  DisplayBalance(balance) {
+    this.labelBalance.textContent = balance;
   }
 
-  //Calculates and displays the summary
-  calcDisplaySummary(account) {
-    const inMoney = account.movements
-      .filter(mov => mov > 0)
-      .reduce((acc, mov) => acc + mov, 0);
-    this.labelSumIn.textContent = `${this.formatCurrencies(
-      inMoney,
-      account.locale,
-      account.currency
-    )}`;
+  displaySummary(inMoney, outMoney, interest) {
+    this.labelSumIn.textContent = inMoney;
+    this.labelSumOut.textContent = `-${outMoney}`;
+    this.labelSumInterest.textContent = interest;
   }
 
   renderMessage(message, type = 'succes', hideForm = true) {

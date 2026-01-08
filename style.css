@@ -285,14 +285,14 @@ nav img {
   color: #666;
 }
 
-.movements__type--deposit {
+.movements__type--depósito {
   /*background-image: linear-gradient(to top left, #39b385, #275400);*/
   color: #097538;
   text-align: center;
   font-weight: bold;
 }
 
-.movements__type--withdrawal {
+.movements__type--retiro {
   /*background-image: linear-gradient(to top left, #a40000, #540004);*/
   color: #6e1b1b;
   text-align: center;
